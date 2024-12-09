@@ -14,7 +14,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'prod_id')->hiddenInput(['value' => $prod_id])->label(false) ?>
 
-    <?= $form->field($model, 'imageFile')->fileInput() ?>
+    <?= $form->field($img, 'imageFile')->fileInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

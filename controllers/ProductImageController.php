@@ -3,6 +3,7 @@
 namespace app\controllers;
 use Yii;
 use app\models\ProductImage;
+use app\models\ProductImageForm;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -59,32 +60,12 @@ class ProductImageController extends Controller
     public function actionCreate($prod_id)
     {
         $model = new ProductImage();
+        $img = new ProductImageForm();
 
         if ($this->request->isPost) {
+            // dd($prod_id);
             if ($model->load($this->request->post())) {
-                // Получение экземпляра загруженного файла
-                $uploadedFile = UploadedFile::getInstance($model, 'imageFile');
-                
-                if ($uploadedFile) {
-                    // Создаём уникальное имя файла
-                    $uniqueFileName = uniqid() . '.' . $uploadedFile->extension; // Например, "64b9fc2d.jpg"
-            
-                    // Путь к папке сохранения
-                    $folder = 'img/product/' . $folder; // Например, "img/product/2024"
-                    $filePath = Yii::getAlias('@webroot') . '/' . $folder . '/' . $uniqueFileName;
-            
-                    // Создаём папку, если её нет
-                    if (!is_dir(Yii::getAlias('@webroot') . '/' . $folder)) {
-                        mkdir(Yii::getAlias('@webroot') . '/' . $folder, 0777, true);
-                    }
-            
-                    // Сохраняем файл
-                    if ($uploadedFile->saveAs($filePath)) {
-                        // Сохраняем уникальное имя файла в модели
-                        $model->image = $folder . '/' . $uniqueFileName; // Сохраните путь в БД
-                    }
-                }
-            
+                $model->image = $img->upload();
                 // Сохраняем модель
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', 'Изображение успешно загружено.');
@@ -92,7 +73,7 @@ class ProductImageController extends Controller
                     Yii::$app->session->setFlash('error', 'Ошибка сохранения данных.');
                 }               
 
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index', 'prod_id' =>  $prod_id]);
             }
         } else {
             $model->loadDefaultValues();
@@ -101,6 +82,7 @@ class ProductImageController extends Controller
         return $this->render('create', [
             'model' => $model,
             'prod_id' => $prod_id,
+            'img' => $img,
         ]);
     }
 

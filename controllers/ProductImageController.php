@@ -16,6 +16,7 @@ use yii\web\UploadedFile;
  */
 class ProductImageController extends Controller
 {
+    public $layout = 'admin';
     /**
      * @inheritDoc
      */
@@ -96,13 +97,13 @@ class ProductImageController extends Controller
      */
     public function actionDelete($id)
     {
-        $image = $this->findModel($id)->image;
+        $image = $this->findModel($id);
         
-        $this->deleteFiles($image);
+        $this->deleteFiles($image->image);
 
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['index', "prod_id" => $image->prod_id]);
     }
 
     public function deleteFiles($image)

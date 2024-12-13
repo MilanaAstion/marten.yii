@@ -2,6 +2,8 @@
 namespace app\models;
 use yii\base\Model;
 use yii\web\UploadedFile;
+use Yii;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class ProductImageForm extends Model
 {
@@ -11,6 +13,7 @@ class ProductImageForm extends Model
     public function rules()
     {
         return [
+            [['imageFile'], 'required'],
             [['imageFile'], 'file', 'extensions' => 'jpeg, jpg, png', 'mimeTypes' => 'image/jpeg, image/png', 'maxSize' => 2 * 1024 * 1024],
         ];
     }
@@ -18,8 +21,10 @@ class ProductImageForm extends Model
     public function upload()
     {
         $this->imageFile = UploadedFile::getInstance($this, 'imageFile');
+        // dd($this->imageFile);
         if ($this->validate()) {
             $this->moveFile();
+            $this->dublicateImage();
             return $this->fileName;
         } else {
             return false;
@@ -29,21 +34,29 @@ class ProductImageForm extends Model
     public function moveFile()
     {
         $this->generateFileName();
-        // $this->imageFile->saveAs('@webroot/img/' . $this->fileName);
-        $folder = 'min';
-        // Путь к папке сохранения
-        $folder = 'img/product/' . $folder; // Например, "img/product/2024"
-        $filePath = Yii::getAlias('@webroot') . '/' . $folder . '/' . $uniqueFileName;
+        $filePath = Yii::getAlias('@webroot') . '/img/product/original/' . $this->fileName;
         // Сохраняем файл
-        if ($uploadedFile->saveAs($filePath)) {
-            // Сохраняем уникальное имя файла в модели
-            $model->image = $uniqueFileName; // Сохраните путь в БД
-        }
+        $this->imageFile->saveAs($filePath);
     }
 
     private function generateFileName()
     {
         // $this->fileName = time() . '.' . $this->imageFile->extension;
         $this->fileName = uniqid() . '.' . $this->imageFile->extension; // Например, "64b9fc2d.jpg"
+    }
+
+    private function dublicateImage()
+    {
+        $filePath = Yii::getAlias('@webroot') . '/img/product/original/' . $this->fileName;
+        // Загружаем изображение
+        $image = Image::make($filePath);
+        // Изменяем размер
+        $image->resize(600, 650);
+        // Сохраняем
+        $image->save(Yii::getAlias('@webroot') . '/img/product/big/' . $this->fileName);
+        $image->resize(270, 265);
+        $image->save(Yii::getAlias('@webroot') . '/img/product/card/' . $this->fileName);
+        $image->resize(140, 135);
+        $image->save(Yii::getAlias('@webroot') . '/img/product/min/' . $this->fileName);
     }
 }

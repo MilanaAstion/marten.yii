@@ -10,8 +10,13 @@ use yii\grid\GridView;
 /** @var yii\web\View $this */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Product: ' . $product->name;
+
+$this->title = 'Product Images: ' . $product->name;
+
+$this->params['breadcrumbs'][] = ['label' => 'Products', 'url' => ['/admin/products']];
+$this->params['breadcrumbs'][] = ['label' => 'Product', 'url' => ['/product/view', 'id' => $product->id]];
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="product-image-index">
 

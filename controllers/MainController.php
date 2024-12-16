@@ -20,6 +20,8 @@ class MainController extends \yii\web\Controller
 
     public function actionIndex()
     {
+        // $cats = Category::buildTree();
+        // dd($cats);
         $popular_products = Product::find()->with('images')->where(['popular' => Product::POPULAR_ID])->all();
         $articles = Article::find()->orderBy(['id' => SORT_DESC])->limit(3)->all();
         // ->where(['popular' => Product::POPULAR_ID])

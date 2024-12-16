@@ -59,4 +59,9 @@ class Category extends \yii\db\ActiveRecord
         }
         return $categories;
     }
+
+    public function getParent()
+    {
+        return self::findOne($this->parent_id);
+    }
 }

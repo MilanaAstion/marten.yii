@@ -16,6 +16,9 @@ use Yii;
  */
 class Article extends \yii\db\ActiveRecord
 {
+
+    public $image;
+
     /**
      * {@inheritdoc}
      */
@@ -34,6 +37,7 @@ class Article extends \yii\db\ActiveRecord
             [['content'], 'string'],
             [['title'], 'string', 'max' => 255],
             [['img', 'author', 'created'], 'string', 'max' => 100],
+            [['image'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxSize' => 1024 * 1024 * 2], 
         ];
     }
 

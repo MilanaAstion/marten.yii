@@ -2,11 +2,13 @@
 
 namespace app\controllers;
 
+use Yii;
 use app\models\Article;
 use app\models\ArticleSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * ArticleController implements the CRUD actions for Article model.
@@ -67,16 +69,45 @@ class ArticleController extends Controller
      */
     public function actionCreate()
     {
+
         $model = new Article();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        } else {
-            $model->loadDefaultValues();
-        }
+            // Загружаем данные из POST-запроса
+            if ($model->load($this->request->post())) {
+                // Получаем файл изображения из формы
+                $imageFile = UploadedFile::getInstance($model, 'image');
+    
+                if ($imageFile) {
+                    // Генерируем уникальное имя файла
+                    $uploadPath = Yii::getAlias('@webroot') . '/img/blog/';
+                    $fileName =  uniqid() . '.' . $imageFile->extension;
+                    $filePath = $uploadPath . $fileName;
+                    // dd($imageFile->saveAs($filePath));
+                    // Сохраняем файл на сервер
+                    if ($imageFile->saveAs($filePath)) {
+                        // Сохраняем путь к файлу в модель
+                        $model->img = $fileName;
+                    } else {
+                        Yii::$app->session->setFlash('error', 'Ошибка загрузки файла.');
+                        return $this->render('create', [
+                            'model' => $model,
+                        ]);
+                    }
+                }
+                $model->created = strval(time());
+                
 
+                // Сохраняем модель
+                if ($model->save()) {
+                    Yii::$app->session->setFlash('success', 'Статья успешно создана.');
+                    return $this->redirect(['view', 'id' => $model->id]);
+                } else {
+                    Yii::$app->session->setFlash('error', 'Ошибка сохранения данных.');
+                }
+            }
+        } 
+    
         return $this->render('create', [
             'model' => $model,
         ]);

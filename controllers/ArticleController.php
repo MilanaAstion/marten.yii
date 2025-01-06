@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Article;
 use app\models\ArticleSearch;
+use app\models\ArticleImageForm;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -72,32 +73,15 @@ class ArticleController extends Controller
 
         $model = new Article();
 
+        $articleImage = new ArticleImageForm();
+
         if ($this->request->isPost) {
             // Загружаем данные из POST-запроса
             if ($model->load($this->request->post())) {
-                // Получаем файл изображения из формы
-                $imageFile = UploadedFile::getInstance($model, 'image');
-    
-                if ($imageFile) {
-                    // Генерируем уникальное имя файла
-                    $uploadPath = Yii::getAlias('@webroot') . '/img/blog/';
-                    $fileName =  uniqid() . '.' . $imageFile->extension;
-                    $filePath = $uploadPath . $fileName;
-                    // dd($imageFile->saveAs($filePath));
-                    // Сохраняем файл на сервер
-                    if ($imageFile->saveAs($filePath)) {
-                        // Сохраняем путь к файлу в модель
-                        $model->img = $fileName;
-                    } else {
-                        Yii::$app->session->setFlash('error', 'Ошибка загрузки файла.');
-                        return $this->render('create', [
-                            'model' => $model,
-                        ]);
-                    }
-                }
+                // Сохраняем путь к файлу в модель
+                $model->img = $articleImage->upload();
                 $model->created = strval(time());
                 
-
                 // Сохраняем модель
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', 'Статья успешно создана.');
@@ -110,6 +94,7 @@ class ArticleController extends Controller
     
         return $this->render('create', [
             'model' => $model,
+            'articleImage' => $articleImage,
         ]);
     }
 
@@ -161,5 +146,29 @@ class ArticleController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionUploadImage()
+    {
+        // $imageFile = UploadedFile::getInstanceByName('upload');
+        // $fileName = uniqid() . '.' . $imageFile->extension;
+        // $filePath = Yii::getAlias('@webroot') . '/img/blog/' . $fileName;
+        // $imageFile->saveAs($filePath);
+        // return '/img/blog/' . $fileName;
+        if (isset($_FILES['upload']) && $_FILES['upload']['error'] === UPLOAD_ERR_OK) {
+            $fileTmpPath = $_FILES['upload']['tmp_name'];  // Временный путь
+            $ext = pathinfo($_FILES['upload']['name'], PATHINFO_EXTENSION);
+            $fileName = uniqid() . '.' . $ext;
+            $filePath = Yii::getAlias('@webroot') . '/img/blog/' . $fileName;
+        
+            // Перемещение файла из временной директории в указанную
+            if (move_uploaded_file($fileTmpPath, $filePath)) {
+                return '/img/blog/' . $fileName;
+            } else {
+                return "Ошибка при сохранении файла.";
+            }
+        } else {
+            return "Файл не был загружен или произошла ошибка.";
+        }
     }
 }

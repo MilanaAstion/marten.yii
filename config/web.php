@@ -52,7 +52,8 @@ $config = [
                 'article/<id:\d+>' => 'blog/article',
                 '/blog' => '/blog/articles',
                 'admin/products' => 'product/index',
-                '/product/images' => 'product-image/index'
+                '/product/images' => 'product-image/index',
+                'article/image/upload' => 'article/upload-image',
             ],
         ],
     ],

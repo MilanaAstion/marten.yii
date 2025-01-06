@@ -18,7 +18,7 @@
                 <div class="blog-details-wrapper res-mrg-top">
                     <div class="single-blog-wrapper">
                         <div class="blog-img mb-30">
-                            <img src="/web/img/blog/blog-details.jpg" alt="">
+                            <img src="/web/img/blog/<?php echo $article->img; ?>" alt="">
                         </div>
                         <div class="blog-details-content">
                             <h2><?= $article->title; ?></h2>

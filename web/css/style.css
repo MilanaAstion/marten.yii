@@ -4695,7 +4695,7 @@ blockquote.importent-title {
     height: 235px;
     padding: 25px 20px;
 }
-.blog-reply-wrapper form .text-leave input {
+.blog-reply-wrapper form .text-leave input, .btn-submit {
     background-color: #7e4c4f;
     border-radius: 50px;
     color: #fff;

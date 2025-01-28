@@ -1,6 +1,7 @@
 <?php
 
 namespace app\controllers;
+use Yii;
 use app\models\Category;
 use app\models\Product;
 use app\models\Article;
@@ -47,6 +48,24 @@ class MainController extends \yii\web\Controller
         //     'categories' => $categories,
         //     'sub_categories' => $sub_categories,
         // ]);
+    }
+
+    public function actionSearch()
+    {
+        $searchTerm = Yii::$app->request->post('search'); // Получаем данные из формы
+
+        if (!empty($searchTerm)) {
+            // Выполняем поиск в таблице products
+            $results = Product::find()
+                ->where(['like', 'name', $searchTerm]) // LIKE по полю title
+                ->all();
+            dd($results);
+            // Передаём результаты в вид
+            return $this->render('search-results', [
+                'results' => $results,
+                'searchTerm' => $searchTerm,
+            ]);
+        }
     }
 
 }

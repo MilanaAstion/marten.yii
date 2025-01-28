@@ -33,77 +33,12 @@
                         </div>
                         <?= $article->content; ?>
                         
-                        <div class="blog-dec-tags-social">
-                            <div class="blog-dec-tags">
-                                <ul>
-                                    <li><a href="#">Dog</a></li>
-                                    <li><a href="#">Cat</a></li>
-                                    <li><a href="#">Fish</a></li>
-                                </ul>
-                            </div>
-                            <div class="blog-dec-social">
-                                <span>share :</span>
-                                <ul>
-                                    <li><a href="#"><i class="icon-social-twitter"></i></a></li>
-                                    <li><a href="#"><i class="icon-social-instagram"></i></a></li>
-                                    <li><a href="#"><i class="icon-social-dribbble"></i></a></li>
-                                    <li><a href="#"><i class="icon-social-linkedin"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
+                        <?php echo $this->render('_tags_social'); ?>
                     </div>
-                    <div class="blog-comment-wrapper mt-55">
-                        <h4 class="blog-dec-title">comments : 02</h4>
-                        <div class="single-comment-wrapper mt-35">
-                            <div class="blog-comment-img">
-                                <img src="/web/img/blog/blog-comment1.png" alt="">
-                            </div>
-                            <div class="blog-comment-content">
-                                <h4>Anthony Stephens</h4>
-                                <span>October 14, 2018 </span>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolor magna aliqua. Ut enim ad minim veniam, </p>
-                                <div class="blog-details-btn">
-                                    <a href="blog-details.html">read more</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="single-comment-wrapper mt-50 ml-125">
-                            <div class="blog-comment-img">
-                                <img src="/web/img/blog/blog-comment2.png" alt="">
-                            </div>
-                            <div class="blog-comment-content">
-                                <h4>Anthony Stephens</h4>
-                                <span>October 14, 2018 </span>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolor magna aliqua. Ut enim ad minim veniam, </p>
-                                <div class="blog-details-btn">
-                                    <a href="blog-details.html">read more</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="blog-reply-wrapper mt-50">
-                        <h4 class="blog-dec-title">post a comment</h4>
-                        <form action="#">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="leave-form">
-                                        <input type="text" placeholder="Full Name">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="leave-form">
-                                        <input type="email" placeholder="Eail Address ">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="text-leave">
-                                        <textarea placeholder="Massage"></textarea>
-                                        <input type="submit" value="SEND MASSAGE">
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+
+                    <?php echo $this->render('_comments', ['article' => $article]); ?>
+
+                    <?php echo $this->render('_form_comment', [ 'comment' => $comment]); ?>
                 </div>
             </div>
             <div class="col-lg-3 col-md-4">

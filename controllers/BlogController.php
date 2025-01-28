@@ -2,8 +2,10 @@
 
 namespace app\controllers;
 use app\models\Article;
+use app\models\ArticleComment;
 use app\models\Category;
 use yii\data\Pagination;
+use Yii;
 
 class BlogController extends \yii\web\Controller
 {
@@ -23,10 +25,14 @@ class BlogController extends \yii\web\Controller
 
     public function actionArticle($id)
     {
-        $article = Article::findOne($id); 
-    
-        return $this->render('article', [
-            'article' => $article, 
+        // $article = Article::findOne($id); 
+        $article = Article::find()->with('comments')->where(['id' => $id])->one();
+        $comment = new ArticleComment;
+        $comment->article_id = $article->id;
+        // dd($article->comments);
+        return $this->render('article/index', [
+            'article' => $article,
+            'comment' => $comment,
         ]);
     }
 
@@ -42,5 +48,17 @@ class BlogController extends \yii\web\Controller
             'articles' => $articles, 
             'pages' => $pages,
         ]);
+    }
+
+    public function actionSaveComment()
+    {
+        $data = Yii::$app->request->post();
+        $model = new ArticleComment();
+        $model->load($data, '');
+        $model->name = $data["author"];
+        $model->img = "blog-comment2.png";
+        $model->created = time();
+        $result = $model->save();
+        return $this->redirect(['article', 'id' => $model->article_id]);
     }
 }

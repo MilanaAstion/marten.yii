@@ -52,9 +52,10 @@
                                 <i class="ti-close s-close"></i>
                             </button>
                             <div class="search-content">
-                                <form action="#">
-                                    <input type="text" placeholder="Search">
-                                    <button>
+                                <form action="main/search" method="POST">
+                                    <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
+                                    <input type="text" placeholder="Search" name="search">
+                                    <button type="submit">
                                         <i class="icon-magnifier"></i>
                                     </button>
                                 </form>

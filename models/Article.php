@@ -1,7 +1,7 @@
 <?php
 
 namespace app\models;
-
+use app\models\ArticleComment;
 use Yii;
 
 /**
@@ -54,5 +54,10 @@ class Article extends \yii\db\ActiveRecord
             'created' => 'Created',
             'content' => 'Content',
         ];
+    }
+
+    public function getComments()
+    {
+        return $this->hasMany(ArticleComment::class, ['article_id' => 'id']);
     }
 }

@@ -59,7 +59,7 @@ class MainController extends \yii\web\Controller
             $results = Product::find()
                 ->where(['like', 'name', $searchTerm]) // LIKE по полю title
                 ->all();
-            dd($results);
+            // dd($results);
             // Передаём результаты в вид
             return $this->render('search-results', [
                 'results' => $results,

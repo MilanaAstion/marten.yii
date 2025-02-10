@@ -54,6 +54,8 @@ $config = [
                 'admin/products' => 'product/index',
                 '/product/images' => 'product-image/index',
                 'article/image/upload' => 'article/upload-image',
+                '/shop/category/<cat_id:\d+>' => 'shop/category',
+                '/shop' => 'shop/index',
             ],
         ],
     ],

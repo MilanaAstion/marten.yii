@@ -18,13 +18,10 @@ class BlogController extends \yii\web\Controller
         return parent::beforeAction($action);
     }
 
-    public function actionIndex()
-    {
-        return $this->render('index');
-    }
 
     public function actionArticle($id)
     {
+        $name_page = "Blog Datails";
         // $article = Article::findOne($id); 
         $article = Article::find()->with('comments')->where(['id' => $id])->one();
         $comment = new ArticleComment;
@@ -33,13 +30,14 @@ class BlogController extends \yii\web\Controller
         return $this->render('article/index', [
             'article' => $article,
             'comment' => $comment,
+            "name_page" => $name_page,
         ]);
     }
 
     public function actionArticles()
     {
         // $articles = Article::find()->all(); 
-        
+        $name_page = "Blog Page";
         $query = Article::find();
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => 2]);
         $articles = $query->offset($pages->offset)->limit($pages->limit)->all();
@@ -47,6 +45,7 @@ class BlogController extends \yii\web\Controller
         return $this->render('articles', [
             'articles' => $articles, 
             'pages' => $pages,
+            "name_page" => $name_page,
         ]);
     }
 

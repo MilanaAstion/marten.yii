@@ -4,17 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\LinkPager;
 ?>
 <!-- breadcrumbs -->
-<div class="breadcrumb-area pt-95 pb-95 bg-img" style="background-image:url(../assets/img/banner/banner-2.jpg);">
-    <div class="container">
-        <div class="breadcrumb-content text-center">
-            <h2>Blog</h2>
-            <ul>
-                <li><a href="index.html">home</a></li>
-                <li class="active">Blog</li>
-            </ul>
-        </div>
-    </div>
-</div>
+<?php echo $this->render("@app/views/templates/breadcrumbs.php", ["name_page" => $name_page]); ?>
 <!-- blog -->
 <div class="blog-area pt-100 pb-100 clearfix">
     <div class="container">
